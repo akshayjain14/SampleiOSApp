@@ -10,25 +10,30 @@ import XCTest
 @testable import SampleiOSTest
 
 class SampleiOSTestTests: XCTestCase {
-
+    ///ViewModel object For API Call
+    var viewModel: ViewModel?
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        viewModel = ViewModel()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        super.tearDown()
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+/// Verifying api call getting Valid data
+    func testValidCall() {
+        let promise = expectation(description: "fetchedSuccess")
+        viewModel =  ViewModel()
+        viewModel?.bindViewModelToController = {
+            guard (self.viewModel?.imageModel.rows) != nil else {
+                XCTFail("Failed")
+                return
+           }
+            promise.fulfill()
         }
-    }
+        wait(for: [promise], timeout: 10)
+
+   }
 
 }
